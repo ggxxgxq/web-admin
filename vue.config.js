@@ -1,6 +1,6 @@
-const path = require('path');
+const path = require("path");
 
-const resolve = dir => {
+const resolve = (dir) => {
   return path.join(__dirname, dir);
 };
 
@@ -12,9 +12,7 @@ const resolve = dir => {
 // 例如：https://www.foobar.com/my-app/
 // 需要将它改为'/my-app/'
 // iview-admin线上演示打包路径： https://file.iviewui.com/admin-dist/
-const BASE_URL = process.env.NODE_ENV === 'production'
-  ? '/'
-  : '/';
+const BASE_URL = process.env.NODE_ENV === "production" ? "/" : "/";
 
 module.exports = {
   // Project deployment base
@@ -29,11 +27,9 @@ module.exports = {
   // see https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
   // 如果你不需要使用eslint，把lintOnSave设为false即可
   lintOnSave: false,
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     // key,value自行定义，比如.set('@@', resolve('src/components'))
-    config.resolve.alias
-      .set('@', resolve('src'))
-      .set('_c', resolve('src/components'));
+    config.resolve.alias.set("@", resolve("src")).set("_c", resolve("src/components"));
   },
   // 设为false打包时不生成.map文件
   productionSourceMap: false,
@@ -45,18 +41,18 @@ module.exports = {
     // 部署端口
     proxy: {
       // 接口代理 - 代理以 "/api" 开头的 url
-      '/api': {
+      "/api": {
         // 后台服务器的地址
-        target: 'http://localhost:8100',
-        pathRewrite: { '^/api': '' },
-        changeOrigin: true
+        target: "http://192.168.0.103:8100",
+        pathRewrite: { "^/api": "" },
+        changeOrigin: true,
       },
       // 静态资源代理 - 代理以 "/local-storage" 开头的 url
-      '/local-storage': {
+      "/local-storage": {
         // 后台服务器的地址
-        target: 'http://localhost:8100',
-        changeOrigin: true
-      }
-    }
-  }
+        target: "http://localhost:8100",
+        changeOrigin: true,
+      },
+    },
+  },
 };
