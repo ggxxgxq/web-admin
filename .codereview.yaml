@@ -88,8 +88,8 @@ code_standards:
       name: "基础代码风格规范"
       description: "通用的代码风格规范"
       type: "file"
-      source: "./docs/code-style.md"
-      enabled: true
+      source: "./code-style.md"
+      enabled: false
       conditions:
         file_extensions: [".js", ".ts", ".vue", ".py", ".java"]
 
@@ -99,7 +99,7 @@ code_standards:
       description: "安全漏洞检查和防护指南"
       type: "url"
       source: "https://example.com/security-guidelines"
-      enabled: true
+      enabled: false
 
     # 内联规则定义
     - id: "performance-rules"
