@@ -1,18 +1,13 @@
-# Ping AI Reviewer 配置文件示例
-# 复制此文件为 .codereview.yaml 并根据项目需求进行配置
-
 version: "1.0"
 
-# 代码审查配置
 review:
   enabled: true
-  language: "zh" # 审查语言: zh | en
-  mode: "strict" # 审查模式: light | strict
+  language: "zh"
+  mode: "strict"
   max_review_length: 4000
   max_files: 50
   max_content_length: 20000
 
-# 文件过滤配置
 files:
   extensions:
     - ".js"
@@ -24,10 +19,6 @@ files:
     - ".json"
     - ".md"
     - ".sql"
-    - ".go"
-    - ".cpp"
-    - ".c"
-    - ".php"
   include:
     - "**/*"
   exclude:
@@ -36,10 +27,7 @@ files:
     - "test/**/*"
     - "**/*.min.js"
     - "**/*.min.css"
-    - "vendor/**/*"
-    - "build/**/*"
 
-# 触发规则配置
 trigger:
   events:
     - "pull_request"
@@ -47,94 +35,61 @@ trigger:
   branches:
     - "master"
     - "develop"
-    - "main"
   include_draft: false
   ignore_rules:
     title_contains:
       - "WIP"
       - "Draft"
       - "DO NOT REVIEW"
-      - "skip-review"
     branch_matches:
       - "release/*"
-      - "hotfix/*"
 
-# 集成配置（可选）
-integrations:
-  dingtalk:
-    enabled: true
-    notification:
-      webhookUrl: "https://oapi.dingtalk.com/robot/send?access_token=your_token"
-      template: "代码审查完成: {project_name} - {summary}"
-
-  feishu:
-    enabled: false
-    notification:
-      webhookUrl: "https://open.feishu.cn/open-apis/bot/v2/hook/your_token"
-# 代码规范配置
-code_standards:
+# 代码规范配置示例
+codeStandards:
   enabled: true
+  sources:
+    # 内联配置
+    - type: "inline"
+      content: |
+        rules:
+          - id: 'naming-convention'
+            name: '命名规范'
+            description: '变量和函数名应该使用驼峰命名法'
+            severity: 'warning'
+            category: 'naming'
+            examples:
+              - bad: 'var user_name = "test"'
+                good: 'var userName = "test"'
+          - id: 'no-console'
+            name: '禁止使用console'
+            description: '生产代码中不应该包含console语句'
+            severity: 'error'
+            category: 'best-practices'
+            examples:
+              - bad: 'console.log("debug info")'
+                good: 'logger.info("debug info")'
+      format: "yaml"
+      priority: 1
 
-  # 自定义提示模板（可选）
-  custom_prompts:
-    system: "你是一个专业的代码审查专家，专注于代码质量、安全性和最佳实践。"
-    review_template: "请按照以下格式提供审查结果：\n1. 总体评价\n2. 具体问题\n3. 改进建议"
-    violation_template: "发现违规: {rule_name} - {description}"
+    # 从仓库文件加载
+    - type: "file"
+      path: "./code-standards.yaml"
+      format: "yaml"
+      priority: 2
 
-  # 规范定义（所有规则都在这里）
-  references:
-    # 本地文件规范
-    - id: "basic-style"
-      name: "基础代码风格规范"
-      description: "通用的代码风格规范"
-      type: "file"
-      source: "./code-style.md"
-      enabled: false
-      conditions:
-        file_extensions: [".js", ".ts", ".vue", ".py", ".java"]
+    # 从外部URL加载
+    #- type: "url"
+    # url: "https://raw.githubusercontent.com/example/standards/main/typescript-rules.yaml"
+    #format: "yaml"
+    # priority: 3
 
-    # HTTP URL 规范
-    - id: "security-guidelines"
-      name: "安全开发指南"
-      description: "安全漏洞检查和防护指南"
-      type: "url"
-      source: "https://example.com/security-guidelines"
-      enabled: false
+    # 从Markdown文档加载
+    - type: "file"
+      path: "./code-style.md"
+      format: "markdown"
+      priority: 4
 
-    # 内联规则定义
-    - id: "performance-rules"
-      name: "性能优化规则"
-      description: "性能优化相关的代码规范"
-      type: "inline"
-      source: ""
-      enabled: true
-      rules:
-        - id: "avoid-n-plus-one"
-          name: "避免N+1查询问题"
-          description: "检查数据库查询是否存在N+1问题"
-          severity: "warning"
-          category: "performance"
-          enabled: true
-          examples:
-            bad: "users.forEach(user => console.log(user.profile.name))"
-            good: "users.forEach(user => console.log(user.profile?.name || 'N/A'))"
-
-    # 项目特定规则集合
-    - id: "project-specific-rules"
-      name: "项目特定规则"
-      description: "项目特定的代码规范"
-      type: "inline"
-      source: ""
-      enabled: true
-      rules:
-        - id: "project-specific-naming"
-          name: "项目特定命名规范"
-          description: "项目特定的命名规范检查"
-          severity: "warning"
-          category: "style"
-          enabled: true
-          conditions:
-            file_extensions: [".js", ".ts"]
-          examples:
-            bad: "var userName = 'test';"
-            good: "const userName = 'test';"
+references:
+  - path: "./docs/code-style.md"
+  - url: "https://example.com/security-guidelines"
+  - url: "https://example.com/performance-checklist"
