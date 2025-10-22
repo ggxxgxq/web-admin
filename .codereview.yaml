@@ -1,0 +1,55 @@
+version: "1.0"
+
+review:
+  enabled: true
+  language: "zh"
+  mode: "strict"
+  max_review_length: 4000
+  max_files: 50
+  max_content_length: 20000
+
+files:
+  extensions:
+    - ".js"
+    - ".ts"
+    - ".vue"
+    - ".py"
+    - ".java"
+    - ".yml"
+    - ".json"
+    - ".md"
+    - ".sql"
+  include:
+    - "**/*"
+  exclude:
+    - "dist/**/*"
+    - "node_modules/**/*"
+    - "test/**/*"
+    - "**/*.min.js"
+    - "**/*.min.css"
+
+trigger:
+  events:
+    - "pull_request"
+    - "push"
+  branches:
+    - "master"
+    - "develop"
+  include_draft: false
+  ignore_rules:
+    title_contains:
+      - "WIP"
+      - "Draft"
+      - "DO NOT REVIEW"
+    branch_matches:
+      - "release/*"
+
+# 参考信息配置 - 支持内部文件和外部URL
+references:
+  # 内部文件路径
+  # - path: "./code-style.md"
+  #   description: "代码风格规范文档"
+
+  # 外部URL
+  - url: "https://rc.pcx.cc/g/lvu4sF?# 《前端代码编程规范》"
+    description: "测试规范指南"
